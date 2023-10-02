@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, map, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { FormsContatoViewModel } from '../models/forms-contato.view-model';
+import { ListarContatoViewModel } from '../models/listar-contato.view-model';
 
 @Injectable()
 export class ContatosService {
@@ -19,6 +20,12 @@ export class ContatosService {
       contato,
       this.obterHeadersAutorizacao()
     );
+  }
+
+  public selecionarTodos(): Observable<ListarContatoViewModel[]> {
+    return this.http
+      .get<any>(this.endpoint, this.obterHeadersAutorizacao())
+      .pipe(map((res) => res.dados));
   }
 
   private obterHeadersAutorizacao() {
