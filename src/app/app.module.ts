@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrModule } from 'ngx-toastr';
 import { DashboardModule } from './views/dashboard/dashboard.module';
+import { CoreModule } from './core/core.module';
 
 @NgModule({
   // Componentes e diretivas que o Módulo Distribui
@@ -23,6 +24,7 @@ import { DashboardModule } from './views/dashboard/dashboard.module';
       preventDuplicates: true,
     }),
 
+    CoreModule,
     DashboardModule,
   ],
   providers: [],
