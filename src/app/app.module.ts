@@ -5,9 +5,13 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrModule } from 'ngx-toastr';
+import { DashboardModule } from './views/dashboard/dashboard.module';
 
 @NgModule({
+  // Componentes e diretivas que o Módulo Distribui
   declarations: [AppComponent],
+
+  // Importa metadados de outros módulos (incluindo bibliotecas)
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -18,6 +22,8 @@ import { ToastrModule } from 'ngx-toastr';
       positionClass: 'toast-bottom-center',
       preventDuplicates: true,
     }),
+
+    DashboardModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
