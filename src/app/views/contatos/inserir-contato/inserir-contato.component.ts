@@ -5,6 +5,9 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
+import { ContatosService } from '../services/contatos.service';
+import { Router } from '@angular/router';
+import { FormsContatoViewModel } from '../models/forms-contato.view-model';
 
 @Component({
   selector: 'app-inserir-contato',
@@ -13,8 +16,13 @@ import {
 })
 export class InserirContatoComponent implements OnInit {
   form!: FormGroup;
+  contatoVM!: FormsContatoViewModel;
 
-  constructor(private formBuilder: FormBuilder) {}
+  constructor(
+    private formBuilder: FormBuilder,
+    private contatoService: ContatosService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.form = this.formBuilder.group({
@@ -27,6 +35,12 @@ export class InserirContatoComponent implements OnInit {
   }
 
   gravar() {
-    console.log(this.form.value);
+    this.contatoVM = this.form.value;
+
+    this.contatoService.inserir(this.contatoVM).subscribe((res) => {
+      console.log(res);
+
+      this.router.navigate(['/dashboard']);
+    });
   }
 }

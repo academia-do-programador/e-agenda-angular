@@ -9,6 +9,7 @@ import { DashboardModule } from './views/dashboard/dashboard.module';
 import { CoreModule } from './core/core.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ContatosModule } from './views/contatos/contatos.module';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   // Componentes e diretivas que o Módulo Distribui
@@ -26,6 +27,7 @@ import { ContatosModule } from './views/contatos/contatos.module';
       preventDuplicates: true,
     }),
 
+    HttpClientModule,
     CoreModule,
     DashboardModule,
     ContatosModule,
