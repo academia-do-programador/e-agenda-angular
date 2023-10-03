@@ -6,9 +6,10 @@ import { ContatosService } from './services/contatos.service';
 import { ListarContatosComponent } from './listar-contatos/listar-contatos.component';
 import { RouterModule } from '@angular/router';
 import { EditarContatoComponent } from './editar-contato/editar-contato.component';
+import { ExcluirContatoComponent } from './excluir-contato/excluir-contato.component';
 
 @NgModule({
-  declarations: [InserirContatoComponent, ListarContatosComponent, EditarContatoComponent],
+  declarations: [InserirContatoComponent, ListarContatosComponent, EditarContatoComponent, ExcluirContatoComponent],
   imports: [CommonModule, ReactiveFormsModule, RouterModule],
   providers: [ContatosService],
 })
