@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { DashboardComponent } from './views/dashboard/dashboard.component';
 import { InserirContatoComponent } from './views/contatos/inserir-contato/inserir-contato.component';
 import { ListarContatosComponent } from './views/contatos/listar-contatos/listar-contatos.component';
+import { EditarContatoComponent } from './views/contatos/editar-contato/editar-contato.component';
 
 const routes: Routes = [
   {
@@ -19,6 +20,10 @@ const routes: Routes = [
   {
     path: 'contatos/inserir',
     component: InserirContatoComponent,
+  },
+  {
+    path: 'contatos/editar/:id',
+    component: EditarContatoComponent,
   },
   {
     path: 'contatos/listar',
