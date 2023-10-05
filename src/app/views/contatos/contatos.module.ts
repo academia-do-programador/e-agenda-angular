@@ -7,9 +7,10 @@ import { ListarContatosComponent } from './listar-contatos/listar-contatos.compo
 import { RouterModule } from '@angular/router';
 import { EditarContatoComponent } from './editar-contato/editar-contato.component';
 import { ExcluirContatoComponent } from './excluir-contato/excluir-contato.component';
+import { CardContatoComponent } from './card-contato/card-contato.component';
 
 @NgModule({
-  declarations: [InserirContatoComponent, ListarContatosComponent, EditarContatoComponent, ExcluirContatoComponent],
+  declarations: [InserirContatoComponent, ListarContatosComponent, EditarContatoComponent, ExcluirContatoComponent, CardContatoComponent],
   imports: [CommonModule, ReactiveFormsModule, RouterModule],
   providers: [ContatosService],
 })
