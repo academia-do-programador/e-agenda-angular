@@ -20,16 +20,16 @@ export class ListarContatosComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.data.pipe(map((dados) => dados['contatos'])).subscribe({
-      next: (contatos) => this.processarSucesso(contatos),
+      next: (contatos) => this.obterContatos(contatos),
       error: (erro) => this.processarFalha(erro),
     });
   }
 
-  processarSucesso(contatos: ListarContatoViewModel[]) {
+  obterContatos(contatos: ListarContatoViewModel[]) {
     this.contatos = contatos;
   }
 
   processarFalha(erro: Error) {
-    this.toastrService.error(erro.message, 'Error');
+    this.toastrService.error(erro.message, 'Erro');
   }
 }

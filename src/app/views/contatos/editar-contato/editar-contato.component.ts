@@ -9,6 +9,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormsContatoViewModel } from '../models/forms-contato.view-model';
 import { ContatosService } from '../services/contatos.service';
 import { ToastrService } from 'ngx-toastr';
+import { map } from 'rxjs';
 
 @Component({
   selector: 'app-editar-contato',
@@ -36,9 +37,10 @@ export class EditarContatoComponent {
       empresa: new FormControl('', [Validators.required]),
     });
 
-    this.contatoVM = this.route.snapshot.data['contato'];
-
-    this.form.patchValue(this.contatoVM);
+    this.route.data.pipe(map((dados) => dados['contato'])).subscribe({
+      next: (contato) => this.obterContato(contato),
+      error: (erro) => this.processarFalha(erro),
+    });
   }
 
   gravar() {
@@ -59,6 +61,11 @@ export class EditarContatoComponent {
       next: (contato) => this.processarSucesso(contato),
       error: (erro) => this.processarFalha(erro),
     });
+  }
+
+  obterContato(contato: FormsContatoViewModel) {
+    this.contatoVM = contato;
+    this.form.patchValue(this.contatoVM);
   }
 
   processarSucesso(contato: FormsContatoViewModel) {
