@@ -10,7 +10,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class ExcluirContatoComponent implements OnInit {
   contatoVM: VisualizarContatoViewModel;
-  idSelecionado: string | null = null;
 
   constructor(
     private contatoService: ContatosService,
@@ -21,19 +20,15 @@ export class ExcluirContatoComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.idSelecionado = this.route.snapshot.paramMap.get('id');
-
-    if (!this.idSelecionado) return;
-
-    this.contatoService
-      .selecionarContatoCompletoPorId(this.idSelecionado)
-      .subscribe((res) => {
-        this.contatoVM = res;
-      });
+    this.contatoVM = this.route.snapshot.data['contato'];
   }
 
   gravar() {
-    this.contatoService.excluir(this.idSelecionado!).subscribe((res) => {
+    const id = this.route.snapshot.paramMap.get('id');
+
+    if (!id) return;
+
+    this.contatoService.excluir(id).subscribe((res) => {
       this.router.navigate(['/contatos', 'listar']);
     });
   }

@@ -18,7 +18,6 @@ import { ToastrService } from 'ngx-toastr';
 export class EditarContatoComponent {
   form!: FormGroup;
   contatoVM!: FormsContatoViewModel;
-  idSelecionado: string | null = null;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -37,13 +36,9 @@ export class EditarContatoComponent {
       empresa: new FormControl('', [Validators.required]),
     });
 
-    this.idSelecionado = this.route.snapshot.paramMap.get('id');
+    this.contatoVM = this.route.snapshot.data['contato'];
 
-    if (!this.idSelecionado) return;
-
-    this.contatoService.selecionarPorId(this.idSelecionado).subscribe((res) => {
-      this.form.patchValue(res);
-    });
+    this.form.patchValue(this.contatoVM);
   }
 
   gravar() {
@@ -56,7 +51,11 @@ export class EditarContatoComponent {
 
     this.contatoVM = this.form.value;
 
-    this.contatoService.editar(this.idSelecionado!, this.contatoVM).subscribe({
+    const id = this.route.snapshot.paramMap.get('id');
+
+    if (!id) return;
+
+    this.contatoService.editar(id, this.contatoVM).subscribe({
       next: (contato) => this.processarSucesso(contato),
       error: (erro) => this.processarFalha(erro),
     });
