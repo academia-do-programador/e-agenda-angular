@@ -20,9 +20,24 @@ export class CompromissosService {
       .pipe(map((res) => res.dados));
   }
 
+  public editar(
+    id: string,
+    compromisso: FormsCompromissoViewModel
+  ): Observable<FormsCompromissoViewModel> {
+    return this.http
+      .put<any>(this.endpoint + id, compromisso, this.obterHeadersAutorizacao())
+      .pipe(map((res) => res.dados));
+  }
+
   public selecionarTodos(): Observable<ListarCompromissoViewModel[]> {
     return this.http
       .get<any>(this.endpoint, this.obterHeadersAutorizacao())
+      .pipe(map((res) => res.dados));
+  }
+
+  public selecionarPorId(id: string): Observable<FormsCompromissoViewModel> {
+    return this.http
+      .get<any>(this.endpoint + id, this.obterHeadersAutorizacao())
       .pipe(map((res) => res.dados));
   }
 
