@@ -15,6 +15,7 @@ import { ContatosService } from './views/contatos/services/contatos.service';
 import { VisualizarContatoViewModel } from './views/contatos/models/visualizar-contato.view-model';
 import { ListarContatoViewModel } from './views/contatos/models/listar-contato.view-model';
 import { InserirCompromissoComponent } from './views/compromissos/inserir-compromisso/inserir-compromisso.component';
+import { ListarCompromissosComponent } from './views/compromissos/listar-compromissos/listar-compromissos.component';
 
 const listarContatosResolver: ResolveFn<ListarContatoViewModel[]> = () => {
   return inject(ContatosService).selecionarTodos();
@@ -70,6 +71,10 @@ const routes: Routes = [
   {
     path: 'compromissos/inserir',
     component: InserirCompromissoComponent,
+  },
+  {
+    path: 'compromissos/listar',
+    component: ListarCompromissosComponent,
   },
 ];
 

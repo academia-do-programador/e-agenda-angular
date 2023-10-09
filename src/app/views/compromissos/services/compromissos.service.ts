@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { FormsCompromissoViewModel } from '../models/forms-compromisso.view-model';
 import { Observable, map } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { ListarCompromissoViewModel } from '../models/listar-compromisso.view-model';
 
 @Injectable()
 export class CompromissosService {
@@ -16,6 +17,12 @@ export class CompromissosService {
   ): Observable<FormsCompromissoViewModel> {
     return this.http
       .post<any>(this.endpoint, compromissso, this.obterHeadersAutorizacao())
+      .pipe(map((res) => res.dados));
+  }
+
+  public selecionarTodos(): Observable<ListarCompromissoViewModel[]> {
+    return this.http
+      .get<any>(this.endpoint, this.obterHeadersAutorizacao())
       .pipe(map((res) => res.dados));
   }
 
