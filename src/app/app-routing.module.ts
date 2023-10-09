@@ -34,14 +34,12 @@ const routes: Routes = [
       import('./views/contatos/contatos.module').then((m) => m.ContatosModule),
   },
 
-  // Compromissos
   {
-    path: 'compromissos/inserir',
-    component: InserirCompromissoComponent,
-  },
-  {
-    path: 'compromissos/listar',
-    component: ListarCompromissosComponent,
+    path: 'compromissos',
+    loadChildren: () =>
+      import('./views/compromissos/compromissos.module').then(
+        (m) => m.CompromissosModule
+      ),
   },
 ];
 

@@ -32,7 +32,6 @@ import { CompromissosModule } from './views/compromissos/compromissos.module';
     HttpClientModule,
     CoreModule,
     DashboardModule,
-    // CompromissosModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

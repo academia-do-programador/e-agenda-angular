@@ -6,13 +6,19 @@ import { RouterModule } from '@angular/router';
 import { CompromissosService } from './services/compromissos.service';
 import { InserirCompromissoComponent } from './inserir-compromisso/inserir-compromisso.component';
 import { ListarCompromissosComponent } from './listar-compromissos/listar-compromissos.component';
+import { CompromissosRoutingModule } from './compromissos-routing.module';
+import { ContatosModule } from '../contatos/contatos.module';
 
 @NgModule({
-  declarations: [
-    InserirCompromissoComponent,
-    ListarCompromissosComponent
+  declarations: [InserirCompromissoComponent, ListarCompromissosComponent],
+  imports: [
+    CommonModule,
+    CompromissosRoutingModule,
+    NgbModule,
+    ReactiveFormsModule,
+
+    ContatosModule,
   ],
-  imports: [CommonModule, RouterModule, NgbModule, ReactiveFormsModule],
   providers: [CompromissosService],
 })
 export class CompromissosModule {}
