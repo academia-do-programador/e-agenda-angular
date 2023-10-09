@@ -14,6 +14,7 @@ import { FormsContatoViewModel } from './views/contatos/models/forms-contato.vie
 import { ContatosService } from './views/contatos/services/contatos.service';
 import { VisualizarContatoViewModel } from './views/contatos/models/visualizar-contato.view-model';
 import { ListarContatoViewModel } from './views/contatos/models/listar-contato.view-model';
+import { InserirCompromissoComponent } from './views/compromissos/inserir-compromisso/inserir-compromisso.component';
 
 const listarContatosResolver: ResolveFn<ListarContatoViewModel[]> = () => {
   return inject(ContatosService).selecionarTodos();
@@ -63,6 +64,12 @@ const routes: Routes = [
     path: 'contatos/listar',
     component: ListarContatosComponent,
     resolve: { contatos: listarContatosResolver },
+  },
+
+  // Compromissos
+  {
+    path: 'compromissos/inserir',
+    component: InserirCompromissoComponent,
   },
 ];
 
