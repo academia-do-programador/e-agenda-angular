@@ -20,9 +20,24 @@ export class CategoriasService {
       .pipe(map((res) => res.dados));
   }
 
+  public editar(
+    id: string,
+    categoria: FormsCategoriaViewModel
+  ): Observable<FormsCategoriaViewModel> {
+    return this.http
+      .put<any>(this.endpoint + id, categoria, this.obterHeadersAutorizacao())
+      .pipe(map((res) => res.dados));
+  }
+
   public selecionarTodos(): Observable<ListarCategoriaViewModel[]> {
     return this.http
       .get<any>(this.endpoint, this.obterHeadersAutorizacao())
+      .pipe(map((res) => res.dados));
+  }
+
+  public selecionarPorId(id: string): Observable<FormsCategoriaViewModel> {
+    return this.http
+      .get<any>(this.endpoint + id, this.obterHeadersAutorizacao())
       .pipe(map((res) => res.dados));
   }
 

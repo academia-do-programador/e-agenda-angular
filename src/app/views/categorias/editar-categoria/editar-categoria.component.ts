@@ -1,34 +1,36 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import {
+  FormGroup,
   FormBuilder,
   FormControl,
-  FormGroup,
   Validators,
 } from '@angular/forms';
-import { FormsCategoriaViewModel } from '../models/forms-categoria.view-model';
-import { CategoriasService } from '../services/categorias.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { CategoriasService } from '../services/categorias.service';
 
 @Component({
-  selector: 'app-inserir-categoria',
-  templateUrl: './inserir-categoria.component.html',
-  styleUrls: ['./inserir-categoria.component.css'],
+  selector: 'app-editar-categoria',
+  templateUrl: './editar-categoria.component.html',
+  styleUrls: ['./editar-categoria.component.css'],
 })
-export class InserirCategoriaComponent implements OnInit {
+export class EditarCategoriaComponent {
   form?: FormGroup;
-  
+
   constructor(
     private formBuilder: FormBuilder,
     private categoriasService: CategoriasService,
     private toastrService: ToastrService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
     this.form = this.formBuilder.group({
       titulo: new FormControl('', [Validators.required]),
     });
+
+    this.form.patchValue(this.route.snapshot.data['categoria']);
   }
 
   campoEstaInvalido(nome: string) {
@@ -44,9 +46,11 @@ export class InserirCategoriaComponent implements OnInit {
       return;
     }
 
-    this.categoriasService.inserir(this.form?.value).subscribe((res) => {
+    const id = this.route.snapshot.paramMap.get('id')!;
+
+    this.categoriasService.editar(id, this.form?.value).subscribe((res) => {
       this.toastrService.success(
-        `A categoria "${res.titulo}" foi cadastrada com sucesso!`,
+        `A categoria "${res.titulo}" foi editada com sucesso!`,
         'Sucesso'
       );
 

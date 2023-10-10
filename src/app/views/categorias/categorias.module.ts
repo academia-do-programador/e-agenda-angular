@@ -8,9 +8,10 @@ import { ReactiveFormsModule } from '@angular/forms';
 import 'src/app/extensions/form-group.extension';
 import { ListarCategoriasComponent } from './listar-categorias/listar-categorias.component';
 import { CardCategoriaComponent } from './card-categoria/card-categoria.component';
+import { EditarCategoriaComponent } from './editar-categoria/editar-categoria.component';
 
 @NgModule({
-  declarations: [InserirCategoriaComponent, ListarCategoriasComponent, CardCategoriaComponent],
+  declarations: [InserirCategoriaComponent, ListarCategoriasComponent, CardCategoriaComponent, EditarCategoriaComponent],
   imports: [CommonModule, CategoriasRoutingModule, ReactiveFormsModule],
   providers: [CategoriasService],
 })
