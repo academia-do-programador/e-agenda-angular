@@ -6,9 +6,11 @@ import { InserirCategoriaComponent } from './inserir-categoria/inserir-categoria
 import { CategoriasService } from './services/categorias.service';
 import { ReactiveFormsModule } from '@angular/forms';
 import 'src/app/extensions/form-group.extension';
+import { ListarCategoriasComponent } from './listar-categorias/listar-categorias.component';
+import { CardCategoriaComponent } from './card-categoria/card-categoria.component';
 
 @NgModule({
-  declarations: [InserirCategoriaComponent],
+  declarations: [InserirCategoriaComponent, ListarCategoriasComponent, CardCategoriaComponent],
   imports: [CommonModule, CategoriasRoutingModule, ReactiveFormsModule],
   providers: [CategoriasService],
 })
