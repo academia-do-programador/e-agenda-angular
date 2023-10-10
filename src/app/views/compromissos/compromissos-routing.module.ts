@@ -10,11 +10,21 @@ import { ListarCompromissosComponent } from './listar-compromissos/listar-compro
 import { FormsCompromissoViewModel } from './models/forms-compromisso.view-model';
 import { CompromissosService } from './services/compromissos.service';
 import { EditarCompromissoComponent } from './editar-compromisso/editar-compromisso.component';
+import { ExcluirCompromissoComponent } from './excluir-compromisso/excluir-compromisso.component';
+import { VisualizarCompromissoViewModel } from './models/visualizar-compromisso.view-model';
 
 const formsCompromissoResolver: ResolveFn<FormsCompromissoViewModel> = (
   route: ActivatedRouteSnapshot
 ) => {
   return inject(CompromissosService).selecionarPorId(route.paramMap.get('id')!);
+};
+
+const visualizarCompromissoResolver: ResolveFn<
+  VisualizarCompromissoViewModel
+> = (route: ActivatedRouteSnapshot) => {
+  return inject(CompromissosService).selecionarCompromissoCompletoPorId(
+    route.paramMap.get('id')!
+  );
 };
 
 const routes: Routes = [
@@ -36,6 +46,11 @@ const routes: Routes = [
     path: 'editar/:id',
     component: EditarCompromissoComponent,
     resolve: { compromisso: formsCompromissoResolver },
+  },
+  {
+    path: 'excluir/:id',
+    component: ExcluirCompromissoComponent,
+    resolve: { compromisso: visualizarCompromissoResolver },
   },
 ];
 

@@ -9,9 +9,10 @@ import { ListarCompromissosComponent } from './listar-compromissos/listar-compro
 import { CompromissosRoutingModule } from './compromissos-routing.module';
 import { ContatosModule } from '../contatos/contatos.module';
 import { EditarCompromissoComponent } from './editar-compromisso/editar-compromisso.component';
+import { ExcluirCompromissoComponent } from './excluir-compromisso/excluir-compromisso.component';
 
 @NgModule({
-  declarations: [InserirCompromissoComponent, ListarCompromissosComponent, EditarCompromissoComponent],
+  declarations: [InserirCompromissoComponent, ListarCompromissosComponent, EditarCompromissoComponent, ExcluirCompromissoComponent],
   imports: [
     CommonModule,
     CompromissosRoutingModule,
