@@ -11,15 +11,25 @@ import { ListarCategoriaViewModel } from './models/listar-categoria.view-model';
 import { CategoriasService } from './services/categorias.service';
 import { EditarCategoriaComponent } from './editar-categoria/editar-categoria.component';
 import { FormsCategoriaViewModel } from './models/forms-categoria.view-model';
+import { ExcluirCategoriaComponent } from './excluir-categoria/excluir-categoria.component';
+import { VisualizarCategoriaViewModel } from './models/visualizar-categoria.view-model';
 
 const listarCategoriasResolver: ResolveFn<ListarCategoriaViewModel[]> = () => {
   return inject(CategoriasService).selecionarTodos();
 };
 
-const formsCategoriasResolver: ResolveFn<FormsCategoriaViewModel> = (
+const formsCategoriaResolver: ResolveFn<FormsCategoriaViewModel> = (
   route: ActivatedRouteSnapshot
 ) => {
   return inject(CategoriasService).selecionarPorId(route.paramMap.get('id')!);
+};
+
+const visualizarCategoriaResolver: ResolveFn<VisualizarCategoriaViewModel> = (
+  route: ActivatedRouteSnapshot
+) => {
+  return inject(CategoriasService).selecionarCategoriaCompletaPorId(
+    route.paramMap.get('id')!
+  );
 };
 
 const routes: Routes = [
@@ -40,7 +50,13 @@ const routes: Routes = [
   {
     path: 'editar/:id',
     component: EditarCategoriaComponent,
-    resolve: { categoria: formsCategoriasResolver }
+    resolve: { categoria: formsCategoriaResolver },
+  },
+
+  {
+    path: 'excluir/:id',
+    component: ExcluirCategoriaComponent,
+    resolve: { categoria: visualizarCategoriaResolver },
   },
 ];
 
