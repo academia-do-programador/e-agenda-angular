@@ -1,7 +1,13 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { NgModule, inject } from '@angular/core';
+import { ActivatedRouteSnapshot, RouterModule, Routes } from '@angular/router';
 import { InserirDespesaComponent } from './inserir-despesa/inserir-despesa.component';
 import { ListarDespesasComponent } from './listar-despesas/listar-despesas.component';
+import { EditarDespesaComponent } from './editar-despesa/editar-despesa.component';
+import { DespesasService } from './services/despesas.service';
+
+const formsDespesaResolver = (route: ActivatedRouteSnapshot) => {
+  return inject(DespesasService).selecionarPorId(route.paramMap.get('id')!);
+};
 
 const routes: Routes = [
   {
@@ -13,10 +19,14 @@ const routes: Routes = [
     path: 'listar',
     component: ListarDespesasComponent,
   },
-
   {
     path: 'inserir',
     component: InserirDespesaComponent,
+  },
+  {
+    path: 'editar/:id',
+    component: EditarDespesaComponent,
+    resolve: { despesa: formsDespesaResolver },
   },
 ];
 

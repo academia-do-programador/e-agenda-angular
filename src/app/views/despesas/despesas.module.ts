@@ -9,9 +9,10 @@ import { InserirDespesaComponent } from './inserir-despesa/inserir-despesa.compo
 import { DespesasService } from './services/despesas.service';
 import 'src/app/extensions/form-group.extension';
 import { ListarDespesasComponent } from './listar-despesas/listar-despesas.component';
+import { EditarDespesaComponent } from './editar-despesa/editar-despesa.component';
 
 @NgModule({
-  declarations: [InserirDespesaComponent, ListarDespesasComponent],
+  declarations: [InserirDespesaComponent, ListarDespesasComponent, EditarDespesaComponent],
   imports: [
     CommonModule,
     DespesasRoutingModule,
