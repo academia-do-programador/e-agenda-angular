@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ListarDespesaViewModel } from '../models/listar-despesa.view-model';
 import { DespesasService } from '../services/despesas.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-listar-despesas',
@@ -10,11 +11,9 @@ import { DespesasService } from '../services/despesas.service';
 export class ListarDespesasComponent implements OnInit {
   despesas: ListarDespesaViewModel[] = [];
 
-  constructor(private despesasService: DespesasService) {}
+  constructor(private route: ActivatedRoute) {}
 
   ngOnInit(): void {
-    this.despesasService
-      .selecionarTodos()
-      .subscribe((res) => (this.despesas = res));
+    this.despesas = this.route.snapshot.data['despesas'];
   }
 }

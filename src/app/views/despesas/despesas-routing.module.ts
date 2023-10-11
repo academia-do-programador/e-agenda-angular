@@ -4,9 +4,20 @@ import { InserirDespesaComponent } from './inserir-despesa/inserir-despesa.compo
 import { ListarDespesasComponent } from './listar-despesas/listar-despesas.component';
 import { EditarDespesaComponent } from './editar-despesa/editar-despesa.component';
 import { DespesasService } from './services/despesas.service';
+import { ExcluirDespesaComponent } from './excluir-despesa/excluir-despesa.component';
+
+const listarDespesasResolver = () => {
+  return inject(DespesasService).selecionarTodos();
+};
 
 const formsDespesaResolver = (route: ActivatedRouteSnapshot) => {
   return inject(DespesasService).selecionarPorId(route.paramMap.get('id')!);
+};
+
+const visualizarDespesaResolver = (route: ActivatedRouteSnapshot) => {
+  return inject(DespesasService).selecionarDespesaCompletaPorId(
+    route.paramMap.get('id')!
+  );
 };
 
 const routes: Routes = [
@@ -18,6 +29,7 @@ const routes: Routes = [
   {
     path: 'listar',
     component: ListarDespesasComponent,
+    resolve: { despesas: listarDespesasResolver },
   },
   {
     path: 'inserir',
@@ -27,6 +39,11 @@ const routes: Routes = [
     path: 'editar/:id',
     component: EditarDespesaComponent,
     resolve: { despesa: formsDespesaResolver },
+  },
+  {
+    path: 'excluir/:id',
+    component: ExcluirDespesaComponent,
+    resolve: { despesa: visualizarDespesaResolver },
   },
 ];
 
