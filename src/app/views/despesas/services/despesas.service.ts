@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { FormsDespesaViewModel } from '../models/forms-despesa.view-model';
 import { environment } from 'src/environments/environment';
+import { ListarDespesaViewModel } from '../models/listar-despesa.view-model';
 
 @Injectable()
 export class DespesasService {
@@ -16,6 +17,12 @@ export class DespesasService {
   ): Observable<FormsDespesaViewModel> {
     return this.http
       .post<any>(this.endpoint, despesa, this.obterHeadersAutorizacao())
+      .pipe(map((res) => res.dados));
+  }
+
+  public selecionarTodos(): Observable<ListarDespesaViewModel[]> {
+    return this.http
+      .get<any>(this.endpoint, this.obterHeadersAutorizacao())
       .pipe(map((res) => res.dados));
   }
 
