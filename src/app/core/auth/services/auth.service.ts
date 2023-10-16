@@ -50,34 +50,32 @@ export class AuthService {
     );
   }
 
-  public logout() {
+  public logout(): Observable<any> {
     return this.http
-      .post(this.endpoint + 'sair', {})
+      .post<any>(this.endpoint + 'sair', {})
       .pipe(tap(() => this.notificarLogout()));
   }
 
-  public logarUsuarioSalvo() {
+  public logarUsuarioSalvo(): void {
     const dadosSalvos = this.obterDadosLocaisSalvos();
 
     if (!dadosSalvos) return;
 
-    let tokenValido =
-      dadosSalvos.dataExpiracao && dadosSalvos.dataExpiracao > new Date();
+    let tokenValido = new Date(dadosSalvos.dataExpiracao) > new Date();
 
-    if (!dadosSalvos.usuarioToken || !tokenValido) return;
-
-    this.notificarLogin(dadosSalvos.usuarioToken);
+    if (dadosSalvos.usuarioToken && tokenValido)
+      this.notificarLogin(dadosSalvos.usuarioToken);
   }
 
   public usuarioAutenticado(): Observable<UsuarioTokenViewModel | undefined> {
     return this._usuarioAutenticado.asObservable();
   }
 
-  private notificarLogin(usuario: UsuarioTokenViewModel) {
+  private notificarLogin(usuario: UsuarioTokenViewModel): void {
     return this._usuarioAutenticado.next(usuario);
   }
 
-  private notificarLogout() {
+  private notificarLogout(): void {
     return this._usuarioAutenticado.next(undefined);
   }
 
