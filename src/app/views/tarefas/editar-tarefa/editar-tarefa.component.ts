@@ -1,23 +1,24 @@
 import { Component, OnInit } from '@angular/core';
 import {
-  FormArray,
-  FormBuilder,
-  FormControl,
   FormGroup,
+  FormControl,
+  FormBuilder,
+  FormArray,
   Validators,
 } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { ItemTarefaViewModel } from '../models/item-tarefa.view-model';
 import { StatusItemTarefa } from '../models/status-item-tarefa.enum';
-import { ToastrService } from 'ngx-toastr';
 import { TarefasService } from '../services/tarefas.service';
-import { Router } from '@angular/router';
+import { group } from '@angular/animations';
 
 @Component({
-  selector: 'app-inserir-tarefa',
-  templateUrl: './inserir-tarefa.component.html',
-  styleUrls: ['./inserir-tarefa.component.css'],
+  selector: 'app-editar-tarefa',
+  templateUrl: './editar-tarefa.component.html',
+  styleUrls: ['./editar-tarefa.component.css'],
 })
-export class InserirTarefaComponent implements OnInit {
+export class EditarTarefaComponent implements OnInit {
   formTarefa?: FormGroup;
   tituloItemControl?: FormControl;
 
@@ -25,7 +26,8 @@ export class InserirTarefaComponent implements OnInit {
     private formBuilder: FormBuilder,
     private tarefasService: TarefasService,
     private toastrService: ToastrService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {}
 
   get itens(): FormArray {
@@ -41,6 +43,23 @@ export class InserirTarefaComponent implements OnInit {
     });
 
     this.tituloItemControl = this.formBuilder.control('');
+
+    const tarefa = this.route.snapshot.data['tarefa'];
+
+    // Carregando título e prioridade
+    this.formTarefa.patchValue(tarefa);
+
+    // Carregando itens no FormArray
+    for (let itemCadastrado of tarefa.itens) {
+      const novoItemGroup = this.formBuilder.group({
+        id: [itemCadastrado.id],
+        titulo: [itemCadastrado.titulo],
+        status: [itemCadastrado.status],
+        concluido: [itemCadastrado.concluido],
+      });
+
+      this.itens.push(novoItemGroup);
+    }
   }
 
   campoEstaInvalido(nome: string) {
@@ -68,7 +87,26 @@ export class InserirTarefaComponent implements OnInit {
   }
 
   removerItem(index: number): void {
-    this.itens.removeAt(index);
+    const grupo = this.itens.controls.at(index);
+
+    const valorAtual = grupo?.get('status')?.value as StatusItemTarefa;
+
+    const valorAlternado =
+      valorAtual == StatusItemTarefa.Removido
+        ? StatusItemTarefa.Inalterado
+        : StatusItemTarefa.Removido;
+
+    grupo?.patchValue({ status: valorAlternado });
+  }
+
+  concluirItem(index: number): void {
+    const grupo = this.itens.controls.at(index);
+
+    const valorAtual = grupo?.get('concluido')?.value as boolean;
+
+    const valorAlternado = !valorAtual;
+
+    grupo?.patchValue({ concluido: valorAlternado });
   }
 
   gravar(): void {
@@ -80,9 +118,11 @@ export class InserirTarefaComponent implements OnInit {
       return;
     }
 
-    this.tarefasService.inserir(this.formTarefa?.value).subscribe((res) => {
+    const id = this.route.snapshot.paramMap.get('id')!;
+
+    this.tarefasService.editar(id, this.formTarefa?.value).subscribe((res) => {
       this.toastrService.success(
-        `A tarefa "${res.titulo}" foi inserida com sucesso!`,
+        `A tarefa "${res.titulo}" foi editada com sucesso!`,
         'Sucesso'
       );
 

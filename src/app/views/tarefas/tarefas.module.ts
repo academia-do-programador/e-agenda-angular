@@ -9,8 +9,9 @@ import { ReactiveFormsModule } from '@angular/forms';
 import 'src/app/extensions/form-group.extension';
 import { TarefasService } from './services/tarefas.service';
 import { ListarTarefasComponent } from './listar-tarefas/listar-tarefas.component';
+import { EditarTarefaComponent } from './editar-tarefa/editar-tarefa.component';
 @NgModule({
-  declarations: [InserirTarefaComponent, ListarTarefasComponent],
+  declarations: [InserirTarefaComponent, ListarTarefasComponent, EditarTarefaComponent],
   imports: [
     CommonModule,
     TarefasRoutingModule,
