@@ -11,6 +11,7 @@ import { CoreModule } from './core/core.module';
 import { ContatosModule } from './views/contatos/contatos.module';
 import { HttpClientModule } from '@angular/common/http';
 import { CompromissosModule } from './views/compromissos/compromissos.module';
+import { LoginModule } from './views/login/login.module';
 
 @NgModule({
   // Componentes e diretivas que o Módulo Distribui
@@ -31,6 +32,7 @@ import { CompromissosModule } from './views/compromissos/compromissos.module';
 
     HttpClientModule,
     CoreModule,
+    LoginModule,
     DashboardModule,
   ],
   providers: [],
