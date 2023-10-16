@@ -7,13 +7,18 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { CategoriasModule } from '../categorias/categorias.module';
 import { InserirDespesaComponent } from './inserir-despesa/inserir-despesa.component';
 import { DespesasService } from './services/despesas.service';
-import 'src/app/extensions/form-group.extension';
 import { ListarDespesasComponent } from './listar-despesas/listar-despesas.component';
 import { EditarDespesaComponent } from './editar-despesa/editar-despesa.component';
 import { ExcluirDespesaComponent } from './excluir-despesa/excluir-despesa.component';
+import 'src/app/extensions/form-group.extension';
 
 @NgModule({
-  declarations: [InserirDespesaComponent, ListarDespesasComponent, EditarDespesaComponent, ExcluirDespesaComponent],
+  declarations: [
+    InserirDespesaComponent,
+    ListarDespesasComponent,
+    EditarDespesaComponent,
+    ExcluirDespesaComponent,
+  ],
   imports: [
     CommonModule,
     DespesasRoutingModule,
