@@ -4,6 +4,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { ListarTarefaViewModel } from '../models/listar-tarefa.view-model';
+import { VisualizarTarefaViewModel } from '../models/visualizar-tarefa.view-model';
 
 @Injectable()
 export class TarefasService {
@@ -20,10 +21,20 @@ export class TarefasService {
       .pipe(map((res) => res.dados));
   }
 
-  public editar(id: string, tarefa: FormsTarefaViewModel) {
+  public editar(
+    id: string,
+    tarefa: FormsTarefaViewModel
+  ): Observable<FormsTarefaViewModel> {
     return this.http
       .put<any>(this.endpoint + id, tarefa, this.obterHeadersAutorizacao())
       .pipe(map((res) => res.dados));
+  }
+
+  public excluir(id: string): Observable<any> {
+    return this.http.delete<any>(
+      this.endpoint + id,
+      this.obterHeadersAutorizacao()
+    );
   }
 
   public selecionarTodos(): Observable<ListarTarefaViewModel[]> {
@@ -35,6 +46,17 @@ export class TarefasService {
   public selecionarPorId(id: string): Observable<FormsTarefaViewModel> {
     return this.http
       .get<any>(this.endpoint + id, this.obterHeadersAutorizacao())
+      .pipe(map((res) => res.dados));
+  }
+
+  public selecionarTarefaCompletaPorId(
+    id: string
+  ): Observable<VisualizarTarefaViewModel> {
+    return this.http
+      .get<any>(
+        this.endpoint + 'visualizacao-completa/' + id,
+        this.obterHeadersAutorizacao()
+      )
       .pipe(map((res) => res.dados));
   }
 
