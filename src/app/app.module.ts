@@ -11,6 +11,7 @@ import { CoreModule } from './core/core.module';
 import { ContatosModule } from './views/contatos/contatos.module';
 import { HttpClientModule } from '@angular/common/http';
 import { CompromissosModule } from './views/compromissos/compromissos.module';
+import { RegistroModule } from './views/registro/registro.module';
 
 @NgModule({
   // Componentes e diretivas que o Módulo Distribui
@@ -20,17 +21,18 @@ import { CompromissosModule } from './views/compromissos/compromissos.module';
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
+    HttpClientModule,
     AppRoutingModule,
-    NgbModule,
 
+    NgbModule,
     ToastrModule.forRoot({
       timeOut: 5000,
       positionClass: 'toast-bottom-center',
       preventDuplicates: true,
     }),
 
-    HttpClientModule,
     CoreModule,
+    RegistroModule,
     DashboardModule,
   ],
   providers: [],
