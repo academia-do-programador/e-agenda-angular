@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { CategoriasService } from '../../categorias/services/categorias.service';
 import { DespesasService } from '../services/despesas.service';
+import { FormsDespesaViewModel } from '../models/forms-despesa.view-model';
 
 @Component({
   selector: 'app-inserir-despesa',
@@ -57,13 +58,22 @@ export class InserirDespesaComponent implements OnInit {
       return;
     }
 
-    this.despesasService.inserir(this.form?.value).subscribe((res) => {
-      this.toastrService.success(
-        `A despesa "${res.descricao}" foi cadastrada com sucesso!`,
-        'Sucesso'
-      );
-
-      this.router.navigate(['/despesas/listar']);
+    this.despesasService.inserir(this.form?.value).subscribe({
+      next: (despesaInserida) => this.processarSucesso(despesaInserida),
+      error: (err) => this.processarFalha(err),
     });
+  }
+
+  processarSucesso(despesa: FormsDespesaViewModel) {
+    this.toastrService.success(
+      `A despesa "${despesa.descricao}" foi cadastrada com sucesso!`,
+      'Sucesso'
+    );
+
+    this.router.navigate(['/despesas/listar']);
+  }
+
+  processarFalha(erro: Error) {
+    this.toastrService.error(erro.message, 'Error');
   }
 }

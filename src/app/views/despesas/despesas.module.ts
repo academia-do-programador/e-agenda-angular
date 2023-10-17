@@ -11,6 +11,7 @@ import { ListarDespesasComponent } from './listar-despesas/listar-despesas.compo
 import { EditarDespesaComponent } from './editar-despesa/editar-despesa.component';
 import { ExcluirDespesaComponent } from './excluir-despesa/excluir-despesa.component';
 import 'src/app/extensions/form-group.extension';
+import { CardDespesaComponent } from './card-despesa/card-despesa.component';
 
 @NgModule({
   declarations: [
@@ -18,6 +19,7 @@ import 'src/app/extensions/form-group.extension';
     ListarDespesasComponent,
     EditarDespesaComponent,
     ExcluirDespesaComponent,
+    CardDespesaComponent,
   ],
   imports: [
     CommonModule,

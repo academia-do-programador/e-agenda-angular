@@ -11,6 +11,7 @@ import { ListarCategoriaViewModel } from '../../categorias/models/listar-categor
 import { CategoriasService } from '../../categorias/services/categorias.service';
 import { DespesasService } from '../services/despesas.service';
 import { FormsDespesaViewModel } from '../models/forms-despesa.view-model';
+import { map } from 'rxjs';
 
 @Component({
   selector: 'app-editar-despesa',
@@ -49,14 +50,14 @@ export class EditarDespesaComponent {
       .selecionarTodos()
       .subscribe((res) => (this.categorias = res));
 
-    const despesa = this.route.snapshot.data[
-      'despesa'
-    ] as FormsDespesaViewModel;
-
-    this.form.patchValue({
-      ...despesa,
-      data: despesa.data.toString().substring(0, 10),
-    });
+    this.route.data
+      .pipe(map((dados) => dados['despesa']))
+      .subscribe((despesa: FormsDespesaViewModel) => {
+        this.form?.patchValue({
+          ...despesa,
+          data: despesa.data.toString().substring(0, 10),
+        });
+      });
   }
 
   gravar() {
@@ -70,13 +71,22 @@ export class EditarDespesaComponent {
 
     const id = this.route.snapshot.paramMap.get('id')!;
 
-    this.despesasService.editar(id, this.form?.value).subscribe((res) => {
-      this.toastrService.success(
-        `A despesa "${res.descricao}" foi cadastrada com sucesso!`,
-        'Sucesso'
-      );
-
-      this.router.navigate(['/despesas/listar']);
+    this.despesasService.editar(id, this.form?.value).subscribe({
+      next: (despesaInserida) => this.processarSucesso(despesaInserida),
+      error: (err) => this.processarFalha(err),
     });
+  }
+
+  processarSucesso(despesa: FormsDespesaViewModel) {
+    this.toastrService.success(
+      `A despesa "${despesa.descricao}" foi editada com sucesso!`,
+      'Sucesso'
+    );
+
+    this.router.navigate(['/despesas', 'listar']);
+  }
+
+  processarFalha(erro: Error) {
+    this.toastrService.error(erro.message, 'Error');
   }
 }

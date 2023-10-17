@@ -3,6 +3,7 @@ import { VisualizarDespesaViewModel } from '../models/visualizar-despesa.view-mo
 import { DespesasService } from '../services/despesas.service';
 import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Router } from '@angular/router';
+import { map } from 'rxjs';
 
 @Component({
   selector: 'app-excluir-despesa',
@@ -20,17 +21,28 @@ export class ExcluirDespesaComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.despesaVM = this.route.snapshot.data['despesa'];
+    this.route.data
+      .pipe(map((dados) => dados['despesa']))
+      .subscribe((res) => (this.despesaVM = res));
   }
 
   gravar() {
-    this.despesasService.excluir(this.despesaVM!.id).subscribe(() => {
-      this.toastrService.success(
-        `A despesa foi excluída com sucesso!`,
-        'Sucesso'
-      );
-
-      this.router.navigate(['/despesas', 'listar']);
+    this.despesasService.excluir(this.despesaVM!.id).subscribe({
+      next: () => this.processarSucesso(),
+      error: (err) => this.processarFalha(err),
     });
+  }
+
+  processarSucesso() {
+    this.toastrService.success(
+      `A despesa foi excluída com sucesso!`,
+      'Sucesso'
+    );
+
+    this.router.navigate(['/despesas', 'listar']);
+  }
+
+  processarFalha(erro: Error) {
+    this.toastrService.error(erro.message, 'Error');
   }
 }
