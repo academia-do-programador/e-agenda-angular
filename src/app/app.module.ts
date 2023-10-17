@@ -11,6 +11,7 @@ import { CoreModule } from './core/core.module';
 import { HttpClientModule } from '@angular/common/http';
 import { LoginModule } from './views/login/login.module';
 import { AuthService } from './core/auth/services/auth.service';
+import { RegistroModule } from './views/registro/registro.module';
 
 function logarUsuarioSalvoFactory(auth: AuthService) {
   return () => auth.logarUsuarioSalvo();
@@ -36,6 +37,7 @@ function logarUsuarioSalvoFactory(auth: AuthService) {
     HttpClientModule,
     CoreModule,
     LoginModule,
+    RegistroModule,
     DashboardModule,
   ],
   providers: [

@@ -50,7 +50,8 @@ export class AuthService {
     return this.http.post<any>(this.endpointRegistro, usuario).pipe(
       map((res) => res.dados),
       tap((dados) => this.notificarLogin(dados.usuarioToken)),
-      tap((dados) => this.localStorage.salvarDadosLocaisUsuario(dados))
+      tap((dados) => this.localStorage.salvarDadosLocaisUsuario(dados)),
+      catchError((err) => this.processarErro(err))
     );
   }
 
