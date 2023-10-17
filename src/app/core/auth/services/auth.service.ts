@@ -1,8 +1,9 @@
+import { TokenViewModel } from './../models/token.view-model';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, catchError, map, throwError } from 'rxjs';
+import { Observable, catchError, map, tap, throwError } from 'rxjs';
 import { RegistrarUsuarioViewModel } from '../models/registrar-usuario.view-model';
-import { TokenViewModel } from '../models/token.view-model';
+import { LocalStorageService } from './local-storage.service';
 
 @Injectable()
 export class AuthService {
@@ -10,13 +11,22 @@ export class AuthService {
 
   private endpointRegistrar: string = this.endpoint + 'registrar';
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private localStorage: LocalStorageService
+  ) {}
 
   public registrar(
     usuario: RegistrarUsuarioViewModel
   ): Observable<TokenViewModel> {
     return this.http.post<any>(this.endpointRegistrar, usuario).pipe(
+      // Mapeio a resposta completa para retornar apenas os dados
       map((res) => res.dados),
+
+      // Obter o retorno do map e salvar no local-storage
+      tap((dados: TokenViewModel) =>
+        this.localStorage.salvarDadosLocaisUsuario(dados)
+      ),
       catchError((err) => this.processarErroHttp(err))
     );
   }
