@@ -11,7 +11,8 @@ import { ToastrService } from 'ngx-toastr';
 import { ItemTarefaViewModel } from '../models/item-tarefa.view-model';
 import { StatusItemTarefa } from '../models/status-item-tarefa.enum';
 import { TarefasService } from '../services/tarefas.service';
-import { group } from '@angular/animations';
+import { FormsTarefaViewModel } from '../models/forms-tarefa.view-model';
+import { map } from 'rxjs';
 
 @Component({
   selector: 'app-editar-tarefa',
@@ -44,10 +45,14 @@ export class EditarTarefaComponent implements OnInit {
 
     this.tituloItemControl = this.formBuilder.control('');
 
-    const tarefa = this.route.snapshot.data['tarefa'];
+    this.route.data.pipe(map((dados) => dados['tarefa'])).subscribe({
+      next: (tarefa) => this.obterTarefa(tarefa),
+      error: (erro) => this.processarFalha(erro),
+    });
+  }
 
-    // Carregando título e prioridade
-    this.formTarefa.patchValue(tarefa);
+  obterTarefa(tarefa: FormsTarefaViewModel) {
+    this.formTarefa?.patchValue(tarefa);
 
     // Carregando itens no FormArray
     for (let itemCadastrado of tarefa.itens) {
@@ -60,12 +65,6 @@ export class EditarTarefaComponent implements OnInit {
 
       this.itens.push(novoItemGroup);
     }
-  }
-
-  campoEstaInvalido(nome: string) {
-    return (
-      this.formTarefa!.get(nome)!.touched && this.formTarefa!.get(nome)!.invalid
-    );
   }
 
   adicionarItem(): void {
@@ -109,6 +108,12 @@ export class EditarTarefaComponent implements OnInit {
     grupo?.patchValue({ concluido: valorAlternado });
   }
 
+  campoEstaInvalido(nome: string) {
+    return (
+      this.formTarefa!.get(nome)!.touched && this.formTarefa!.get(nome)!.invalid
+    );
+  }
+
   gravar(): void {
     if (this.formTarefa?.invalid) {
       const erros = this.formTarefa.validate();
@@ -120,13 +125,22 @@ export class EditarTarefaComponent implements OnInit {
 
     const id = this.route.snapshot.paramMap.get('id')!;
 
-    this.tarefasService.editar(id, this.formTarefa?.value).subscribe((res) => {
-      this.toastrService.success(
-        `A tarefa "${res.titulo}" foi editada com sucesso!`,
-        'Sucesso'
-      );
-
-      this.router.navigate(['/tarefas', 'listar']);
+    this.tarefasService.editar(id, this.formTarefa?.value).subscribe({
+      next: (tarefa: FormsTarefaViewModel) => this.processarSucesso(tarefa),
+      error: (err: Error) => this.processarFalha(err),
     });
+  }
+
+  processarSucesso(tarefa: FormsTarefaViewModel) {
+    this.toastrService.success(
+      `A tarefa "${tarefa.titulo}" foi editada com sucesso!`,
+      'Sucesso'
+    );
+
+    this.router.navigate(['/tarefas', 'listar']);
+  }
+
+  processarFalha(erro: Error) {
+    this.toastrService.error(erro.message, 'Error');
   }
 }
