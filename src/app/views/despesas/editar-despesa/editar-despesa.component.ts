@@ -50,14 +50,10 @@ export class EditarDespesaComponent {
       .selecionarTodos()
       .subscribe((res) => (this.categorias = res));
 
-    this.route.data
-      .pipe(map((dados) => dados['despesa']))
-      .subscribe((despesa: FormsDespesaViewModel) => {
-        this.form?.patchValue({
-          ...despesa,
-          data: despesa.data.toString().substring(0, 10),
-        });
-      });
+    this.route.data.pipe(map((dados) => dados['despesa'])).subscribe({
+      next: (despesa) => this.obterDespesa(despesa),
+      error: (err) => this.processarFalha(err),
+    });
   }
 
   gravar() {
@@ -74,6 +70,13 @@ export class EditarDespesaComponent {
     this.despesasService.editar(id, this.form?.value).subscribe({
       next: (despesaInserida) => this.processarSucesso(despesaInserida),
       error: (err) => this.processarFalha(err),
+    });
+  }
+
+  obterDespesa(despesa: FormsDespesaViewModel) {
+    this.form?.patchValue({
+      ...despesa,
+      data: despesa.data.toString().substring(0, 10),
     });
   }
 

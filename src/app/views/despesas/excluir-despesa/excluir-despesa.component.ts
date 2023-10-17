@@ -21,9 +21,10 @@ export class ExcluirDespesaComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.route.data
-      .pipe(map((dados) => dados['despesa']))
-      .subscribe((res) => (this.despesaVM = res));
+    this.route.data.pipe(map((dados) => dados['despesa'])).subscribe({
+      next: (despesa) => this.obterDespesa(despesa),
+      error: (err) => this.processarFalha(err),
+    });
   }
 
   gravar() {
@@ -31,6 +32,10 @@ export class ExcluirDespesaComponent implements OnInit {
       next: () => this.processarSucesso(),
       error: (err) => this.processarFalha(err),
     });
+  }
+
+  obterDespesa(despesa: VisualizarDespesaViewModel) {
+    this.despesaVM = despesa;
   }
 
   processarSucesso() {
