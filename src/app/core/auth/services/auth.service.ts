@@ -12,6 +12,7 @@ import {
 import { TokenViewModel } from '../models/token.view-model';
 import { RegistrarUsuarioViewModel } from '../models/registrar-usuario.view-model';
 import { UsuarioTokenViewModel } from '../models/usuario-token.view-model';
+import { LocalStorageService } from './local-storage.service';
 
 @Injectable()
 export class AuthService {
@@ -23,7 +24,10 @@ export class AuthService {
     UsuarioTokenViewModel | undefined
   >;
 
-  constructor(private http: HttpClient) {
+  constructor(
+    private http: HttpClient,
+    private localStorage: LocalStorageService
+  ) {
     this._usuarioAutenticado = new BehaviorSubject<
       UsuarioTokenViewModel | undefined
     >(undefined);
@@ -35,7 +39,7 @@ export class AuthService {
     return this.http.post<any>(this.endpointLogin, usuario).pipe(
       map((res) => res.dados),
       tap((dados) => this.notificarLogin(dados.usuarioToken)),
-      tap((dados) => this.salvarDadosLocaisUsuario(dados)),
+      tap((dados) => this.localStorage.salvarDadosLocaisUsuario(dados)),
       catchError((err) => this.processarErro(err))
     );
   }
@@ -46,7 +50,7 @@ export class AuthService {
     return this.http.post<any>(this.endpointRegistro, usuario).pipe(
       map((res) => res.dados),
       tap((dados) => this.notificarLogin(dados.usuarioToken)),
-      tap((dados) => this.salvarDadosLocaisUsuario(dados))
+      tap((dados) => this.localStorage.salvarDadosLocaisUsuario(dados))
     );
   }
 
@@ -57,7 +61,7 @@ export class AuthService {
   }
 
   public logarUsuarioSalvo(): void {
-    const dadosSalvos = this.obterDadosLocaisSalvos();
+    const dadosSalvos = this.localStorage.obterDadosLocaisSalvos();
 
     if (!dadosSalvos) return;
 
@@ -77,20 +81,6 @@ export class AuthService {
 
   private notificarLogout(): void {
     return this._usuarioAutenticado.next(undefined);
-  }
-
-  private salvarDadosLocaisUsuario(resposta: TokenViewModel): void {
-    const jsonString = JSON.stringify(resposta);
-
-    localStorage.setItem('e-agenda-dados', jsonString);
-  }
-
-  private obterDadosLocaisSalvos(): TokenViewModel | undefined {
-    const jsonString = localStorage.getItem('e-agenda-dados');
-
-    if (jsonString) return JSON.parse(jsonString) as TokenViewModel;
-
-    return undefined;
   }
 
   private processarErro(resposta: any) {
