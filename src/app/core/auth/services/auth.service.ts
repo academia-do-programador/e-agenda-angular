@@ -1,10 +1,18 @@
 import { TokenViewModel } from './../models/token.view-model';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, catchError, map, tap, throwError } from 'rxjs';
+import {
+  BehaviorSubject,
+  Observable,
+  catchError,
+  map,
+  tap,
+  throwError,
+} from 'rxjs';
 import { RegistrarUsuarioViewModel } from '../models/registrar-usuario.view-model';
 import { LocalStorageService } from './local-storage.service';
 import { AutenticarUsuarioViewModel } from '../models/autenticar-usuario.view-model';
+import { UsuarioTokenViewModel } from '../models/usuario-token.view-model';
 
 @Injectable()
 export class AuthService {
@@ -13,10 +21,22 @@ export class AuthService {
   private endpointRegistrar: string = this.endpoint + 'registrar';
   private endpointLogin: string = this.endpoint + 'autenticar';
 
+  private usuarioAutenticado: BehaviorSubject<
+    UsuarioTokenViewModel | undefined
+  >;
+
   constructor(
     private http: HttpClient,
     private localStorage: LocalStorageService
-  ) {}
+  ) {
+    this.usuarioAutenticado = new BehaviorSubject<
+      UsuarioTokenViewModel | undefined
+    >(undefined);
+  }
+
+  public obterUsuarioAutenticado() {
+    return this.usuarioAutenticado.asObservable();
+  }
 
   public registrar(
     usuario: RegistrarUsuarioViewModel
@@ -44,8 +64,20 @@ export class AuthService {
       tap((dados: TokenViewModel) =>
         this.localStorage.salvarDadosLocaisUsuario(dados)
       ),
+
+      // Notifica os componentes que o usuário efetuou login
+      tap((dados: TokenViewModel) => this.notificarLogin(dados.usuarioToken)),
+
       catchError((err) => this.processarErroHttp(err))
     );
+  }
+
+  private notificarLogin(usuario: UsuarioTokenViewModel): void {
+    this.usuarioAutenticado.next(usuario);
+  }
+
+  private notificarLogout(): void {
+    this.usuarioAutenticado.next(undefined);
   }
 
   private processarErroHttp(erro: HttpErrorResponse) {
