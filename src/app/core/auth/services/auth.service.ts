@@ -86,6 +86,18 @@ export class AuthService {
       );
   }
 
+  public logarUsuarioSalvo(): void {
+    const dados = this.localStorage.obterDadosLocaisSalvos();
+
+    if (!dados) return;
+
+    // Data de expiração do Token
+    const tokenEstaValido: boolean = new Date(dados.dataExpiracao) > new Date();
+
+    // Notificar o login
+    if (tokenEstaValido) this.notificarLogin(dados.usuarioToken);
+  }
+
   private notificarLogin(usuario: UsuarioTokenViewModel): void {
     this.usuarioAutenticado.next(usuario);
   }
