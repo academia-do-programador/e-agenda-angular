@@ -3,6 +3,7 @@ import { CompromissosService } from '../services/compromissos.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { VisualizarCompromissoViewModel } from '../models/visualizar-compromisso.view-model';
+import { map } from 'rxjs';
 
 @Component({
   selector: 'app-excluir-compromisso',
@@ -20,17 +21,33 @@ export class ExcluirCompromissoComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.compromissoVM = this.route.snapshot.data['compromisso'];
+    this.route.data.pipe(map((dados) => dados['compromisso'])).subscribe({
+      next: (compromisso) => this.obterCompromisso(compromisso),
+      error: (erro) => this.processarFalha(erro),
+    });
   }
 
   gravar() {
-    this.compromissosService.excluir(this.compromissoVM!.id).subscribe(() => {
-      this.toastrService.success(
-        `O compromisso foi excluído com sucesso!`,
-        'Sucesso'
-      );
-
-      this.router.navigate(['/compromissos', 'listar']);
+    this.compromissosService.excluir(this.compromissoVM!.id).subscribe({
+      next: () => this.processarSucesso(),
+      error: (err) => this.processarFalha(err),
     });
+  }
+
+  obterCompromisso(compromisso: VisualizarCompromissoViewModel) {
+    this.compromissoVM = compromisso;
+  }
+
+  processarSucesso() {
+    this.toastrService.success(
+      `O compromisso foi excluído com sucesso!`,
+      'Sucesso'
+    );
+
+    this.router.navigate(['/compromissos', 'listar']);
+  }
+
+  processarFalha(erro: Error) {
+    this.toastrService.error(erro.message, 'Erro');
   }
 }

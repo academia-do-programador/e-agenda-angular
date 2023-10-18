@@ -12,6 +12,13 @@ import { CompromissosService } from './services/compromissos.service';
 import { EditarCompromissoComponent } from './editar-compromisso/editar-compromisso.component';
 import { ExcluirCompromissoComponent } from './excluir-compromisso/excluir-compromisso.component';
 import { VisualizarCompromissoViewModel } from './models/visualizar-compromisso.view-model';
+import { ListarCompromissoViewModel } from './models/listar-compromisso.view-model';
+
+const listarCompromissosResolver: ResolveFn<
+  ListarCompromissoViewModel[]
+> = () => {
+  return inject(CompromissosService).selecionarTodos();
+};
 
 const formsCompromissoResolver: ResolveFn<FormsCompromissoViewModel> = (
   route: ActivatedRouteSnapshot
@@ -36,6 +43,7 @@ const routes: Routes = [
   {
     path: 'listar',
     component: ListarCompromissosComponent,
+    resolve: { compromissos: listarCompromissosResolver },
   },
 
   {

@@ -62,13 +62,22 @@ export class InserirCompromissoComponent implements OnInit {
       return;
     }
 
-    this.compromissosService.inserir(this.form?.value).subscribe((res) => {
-      this.toastrService.success(
-        `O compromisso "${res.assunto}" foi salvo com sucesso!`,
-        'Sucesso'
-      );
-
-      this.router.navigate(['/compromissos', 'listar']);
+    this.compromissosService.inserir(this.form?.value).subscribe({
+      next: (res) => this.processarSucesso(res),
+      error: (err) => this.processarFalha(err),
     });
+  }
+
+  processarSucesso(res: FormsCompromissoViewModel) {
+    this.toastrService.success(
+      `O compromisso "${res.assunto}" foi salvo com sucesso!`,
+      'Sucesso'
+    );
+
+    this.router.navigate(['/compromissos', 'listar']);
+  }
+
+  processarFalha(erro: Error) {
+    this.toastrService.error(erro.message, 'Erro');
   }
 }
