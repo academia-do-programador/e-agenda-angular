@@ -1,5 +1,9 @@
 import { TokenViewModel } from './../models/token.view-model';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpErrorResponse,
+  HttpHeaders,
+} from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {
   BehaviorSubject,
@@ -20,6 +24,7 @@ export class AuthService {
 
   private endpointRegistrar: string = this.endpoint + 'registrar';
   private endpointLogin: string = this.endpoint + 'autenticar';
+  private endpointLogout: string = this.endpoint + 'sair';
 
   private usuarioAutenticado: BehaviorSubject<
     UsuarioTokenViewModel | undefined
@@ -72,6 +77,15 @@ export class AuthService {
     );
   }
 
+  public logout(): Observable<any> {
+    return this.http
+      .post<any>(this.endpointLogout, {}, this.obterHeadersAutorizacao())
+      .pipe(
+        tap(() => this.notificarLogout()),
+        tap(() => this.localStorage.limparDadosLocais())
+      );
+  }
+
   private notificarLogin(usuario: UsuarioTokenViewModel): void {
     this.usuarioAutenticado.next(usuario);
   }
@@ -91,5 +105,16 @@ export class AuthService {
     else mensagemErro = erro.error?.erros[0];
 
     return throwError(() => new Error(mensagemErro));
+  }
+
+  private obterHeadersAutorizacao() {
+    const token = this.localStorage.obterDadosLocaisSalvos()?.chave;
+
+    return {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      }),
+    };
   }
 }
