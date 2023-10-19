@@ -8,10 +8,16 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrModule } from 'ngx-toastr';
 import { DashboardModule } from './views/dashboard/dashboard.module';
 import { CoreModule } from './core/core.module';
-import { HttpClientModule } from '@angular/common/http';
+import {
+  HTTP_INTERCEPTORS,
+  HttpClientModule,
+  provideHttpClient,
+  withInterceptors,
+} from '@angular/common/http';
 import { LoginModule } from './views/login/login.module';
 import { AuthService } from './core/auth/services/auth.service';
 import { RegistroModule } from './views/registro/registro.module';
+import { httpTokenInterceptor } from './core/auth/interceptors/http-token.interceptor';
 
 function logarUsuarioSalvoFactory(auth: AuthService) {
   return () => auth.logarUsuarioSalvo();
@@ -33,8 +39,6 @@ function logarUsuarioSalvoFactory(auth: AuthService) {
       positionClass: 'toast-bottom-center',
       preventDuplicates: true,
     }),
-
-    HttpClientModule,
     CoreModule,
     LoginModule,
     RegistroModule,
@@ -47,6 +51,7 @@ function logarUsuarioSalvoFactory(auth: AuthService) {
       deps: [AuthService],
       multi: true,
     },
+    provideHttpClient(withInterceptors([httpTokenInterceptor])),
   ],
   bootstrap: [AppComponent],
 })
