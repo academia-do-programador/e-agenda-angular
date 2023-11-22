@@ -1,3 +1,5 @@
+import { ContatosTestSetup } from './contatos-test.setup';
+
 describe('Processo de Cadastro do Contato', () => {
   beforeEach(() => {
     cy.login('tiago@gmail.com', 'Tiago@123');
@@ -12,17 +14,19 @@ describe('Processo de Cadastro do Contato', () => {
   });
 
   it('Deve cadastrar o contato corretamente', () => {
-    cy.get('[data-cy=txtNome]').type('Teste Automatizado Cypress');
+    const form = ContatosTestSetup.obterContatoForm();
 
-    cy.get('[data-cy=txtEmail]').type('teste@cypress.com');
+    form.nome().type('Teste Automatizado Cypress');
 
-    cy.get('[data-cy=txtTelefone]').type('49 99999-0000');
+    form.email().type('teste@cypress.com');
 
-    cy.get('[data-cy=txtCargo]').type('Testador');
+    form.telefone().type('49 99999-0000');
 
-    cy.get('[data-cy=txtEmpresa]').type('Academia do Programador');
+    form.cargo().type('Testador');
 
-    cy.get('[data-cy=btnGravar]').click();
+    form.empresa().type('Academia do Programador');
+
+    form.btnGravar().click();
 
     cy.url().should('contain', '/contatos/listar');
   });
