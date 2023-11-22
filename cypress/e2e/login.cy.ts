@@ -18,13 +18,6 @@ describe('Página de Login', () => {
   });
 
   it('Deve logar e redirecionar usuário', () => {
-    cy.visit('/');
-
-    cy.get('[data-cy=txtEmail]').type('tiago@gmail.com');
-    cy.get('[data-cy=txtSenha]').type('Tiago@123');
-
-    cy.get('[data-cy=btnEntrar]').click();
-
-    cy.url().should('contain', 'dashboard');
+    cy.login('tiago@gmail.com', 'Tiago@123');
   });
 });
